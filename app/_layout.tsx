@@ -1,39 +1,26 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
+import { Slot, Stack } from 'expo-router';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
+import { useColorScheme } from 'react-native';
 import { useEffect } from 'react';
-import 'react-native-reanimated';
+import { setStatusBarStyle, setStatusBarBackgroundColor } from 'expo-status-bar';
 
-import { useColorScheme } from '@/hooks/useColorScheme';
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
-
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
-
+export default function App() {
+  const theme = useColorScheme(); // De
   useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
+    // Set status bar text color (light for dark mode, dark for light mode)
+    setStatusBarStyle(theme === 'dark' ? 'light' : 'dark');
 
-  if (!loaded) {
-    return null;
-  }
-
+    // Set Android status bar background color to match theme
+    setStatusBarBackgroundColor(theme === 'dark' ? '#1f1e24' : '#ffffff', true);
+  }, [theme]);
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <GestureHandlerRootView>
+    <Stack screenOptions={{
+        headerShown: false
+    }} >
+        <Stack.Screen name="(topbar)/accountinfo" options={{ headerShown: true, headerTitle: "Account info", headerBackTitle: "Go Back" }} />
+    </Stack>
+</GestureHandlerRootView>
   );
 }

@@ -6,7 +6,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { Colors } from '@/constants/Colors';
 import { ThemedText } from './ThemedText';
 import { ThemedView } from './ThemedView';
-// import * as MediaLibrary from 'expo-media-library';
+import * as MediaLibrary from 'expo-media-library';
 import * as FileSystem from 'expo-file-system';
 
 export const DownoloadPicture = ({ onClose, wallpaper}: {
@@ -73,18 +73,18 @@ function DownloadButton({ url }: { url: string }) {
     let date = new Date().getTime();
     let fileUri = FileSystem.documentDirectory + `${date}.jpg`;
     
-    // try {
-    //     await FileSystem.downloadAsync(url, fileUri)
-    //     const response = await MediaLibrary.requestPermissionsAsync(true)
-    //     if (response.granted) {
-    //       MediaLibrary.createAssetAsync(fileUri)
-    //       alert("Image saved")
-    //     } else {
-    //       console.error("permission not granted")
-    //     }
-    // } catch (err) {
-    //     console.log("FS Err: ", err)
-    // }
+    try {
+        await FileSystem.downloadAsync(url, fileUri)
+        const response = await MediaLibrary.requestPermissionsAsync(true)
+        if (response.granted) {
+          MediaLibrary.createAssetAsync(fileUri)
+          alert("Image saved")
+        } else {
+          console.error("permission not granted")
+        }
+    } catch (err) {
+        console.log("FS Err: ", err)
+    }
   }} style={{
     backgroundColor: "black",
     padding: 10,
